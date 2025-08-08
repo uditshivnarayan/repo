@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>welcome.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Qwitcher+Grypen&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f3ef;
+      --envelope:#e0d4c8;
+      --accent:#d6bfa6;
+      --paper:#fffefc;
+      --shadow: rgba(20,20,20,0.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Qwitcher Grypen', cursive;
+      font-size: 30px;
+      font-weight:100;
+      background: linear-gradient(180deg,var(--bg),#efeae3 60%);
+      display:grid;
+      place-items:center;
+      padding:40px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .stage{
+      width:360px;
+      height:280px;
+      position:relative;
+      perspective:1100px;
+    }
+
+    .envelope{
+      width:100%;
+      height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 400ms ease;
+      cursor:pointer;
+      user-select:none;
+      outline: none;
+    }
+
+    .back{
+      width:100%;
+      height:100%;
+      background: linear-gradient(180deg,var(--envelope),#d8c9bb);
+      border-radius:12px;
+      box-shadow: 0 14px 34px var(--shadow);
+      position:absolute;
+      top:0;left:0;
+      overflow:hidden;
+    }
+
+    .flap{
+      position:absolute;
+      top:0;left:0;right:0;
+      height:64%;
+      transform-origin: top center;
+      transform: rotateX(0deg);
+      transition: transform 700ms cubic-bezier(.2,.9,.26,1);
+      z-index:4;
+    }
+    .flap::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:0;
+      transform:translateX(-50%);
+      width:120%;
+      height:100%;
+      background: linear-gradient(180deg,var(--accent),var(--envelope));
+      clip-path: polygon(0 0,100% 0,50% 100%);
+      border-radius:8px;
+      box-shadow: 0 10px 24px rgba(10,10,10,0.06) inset;
+    }
+
+    .paper-wrap{
+      position:absolute;
+      inset:12% 8% 8% 8%;
+      pointer-events:none;
+      transform-style:preserve-3d;
+      z-index:2;
+      display:flex;align-items:flex-start;justify-content:center;
+    }
+    .paper{
+      width:86%;
+      height:78%;
+      background:var(--paper);
+      border-radius:8px;
+      box-shadow: 0 8px 26px rgba(10,10,10,0.08);
+      transform-origin: center bottom;
+      transform: translateY(18%) rotateX(18deg);
+      transition: transform 700ms cubic-bezier(.2,.9,.26,1), box-shadow 350ms;
+      padding:28px 22px;
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .paper::after{
+      content:"";
+      position:absolute;
+      left:50%;top:46%;
+      width:92%;height:2px;
+      background:linear-gradient(90deg, transparent, rgba(0,0,0,0.02), transparent);
+      transform:translateX(-50%);
+      opacity:0.6;
+    }
+
+    .letter-text{
+      font-family: 'Montserrat', sans-serif;
+      font-size:20px;
+      line-height:1.2;
+      color:#2c2218;
+      opacity:0;
+      transform: translateY(8px) scale(0.98);
+      transition: opacity 700ms 250ms ease, transform 700ms 250ms ease;
+      text-align:center;
+      padding:8px 12px;
+      max-height:100%;
+      pointer-events:auto;
+    }
+
+    /* Open state */
+    .envelope.open .flap{
+      transform: rotateX(-150deg);
+    }
+    .envelope.open .paper{
+      transform: translateY(-8%) rotateX(0deg) scale(1);
+      box-shadow: 0 24px 52px rgba(10,10,10,0.14);
+    }
+    .envelope.open .letter-text{
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+
+    .envelope:hover{ transform: translateY(-6px); }
+    .envelope:active{ transform: translateY(-2px); }
+
+    .controls{
+      margin-top:18px;text-align:center;font-size:14px;color:#6b6056;
+      display:flex;gap:12px;align-items:center;justify-content:center;flex-direction:column;
+    }
+    .btn{
+      display:inline-block;padding:10px 16px;border-radius:12px;background:#fff;border:1px solid rgba(0,0,0,0.06);box-shadow:0 8px 20px rgba(10,10,10,0.06);cursor:pointer;margin-top:8px;font-weight:600;color:#3b2f28;
+    }
+    .btn:focus{outline:4px solid rgba(214,191,166,0.12)}
+
+    @media (prefers-reduced-motion:reduce){
+      .flap,.paper,.envelope{transition:none;animation:none}
+      .envelope:hover{transform:none}
+    }
+
+    @media (max-width:420px){
+      .stage{width:300px;height:230px}
+      .letter-text{font-size:22px}
+    }
+    /* =============================
+   RESPONSIVE STYLES
+   ============================= */
+
+/* For tablets & small laptops */
+@media (max-width: 1024px) {
+  .stage {
+    width: 320px;
+    height: 250px;
+  }
+  .letter-text {
+    font-size: 18px;
+  }
+  .btn {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+  h2 {
+    font-size: 48px !important;
+  }
+}
+
+/* For large phones & phablets */
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+  .stage {
+    width: 280px;
+    height: 220px;
+  }
+  .letter-text {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .btn {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+  h2 {
+    font-size: 38px !important;
+  }
+  p {
+    font-size: 14px !important;
+  }
+}
+
+/* For small phones */
+@media (max-width: 480px) {
+  .stage {
+    width: 240px;
+    height: 190px;
+  }
+  .letter-text {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .btn {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+  h2 {
+    font-size: 28px !important;
+  }
+  p {
+    font-size: 12px !important;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 360px) {
+  .stage {
+    width: 200px;
+    height: 160px;
+  }
+  .letter-text {
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .btn {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+  h2 {
+    font-size: 25px !important;
+  }
+  p {
+    font-size: 10px !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div style="text-align:center;max-width:720px;">
+    <h2 style="margin:0 0 8px;font-weight:100;color:#2e2a27; font-size: 65px;">happy rakshabandhan.</h2>
+    <p style="margin:0 0 18px;color:#928b82;">tap or click the envelope to open or close.</p>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="envelope" id="envelope" role="button" aria-pressed="false" tabindex="0">
+      <div class="back"></div>
+      <div class="flap" aria-hidden="true"></div>
+
+      <div class="paper-wrap">
+        <div class="paper" id="paper">
+          <div class="letter-text" id="text">
+            becomingishere
+            <br>
+            findmypassword123
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="toggleBtn" aria-pressed="false">Open Letter</button>
+    <div style="margin-top:6px;color:#9b948a;font-size:13px">Press <kbd style="background:#fff;padding:2px 6px;border-radius:4px;border:1px solid rgba(0,0,0,0.06)">Space</kbd> to toggle</div>
+  </div>
+
+  <audio id="openSound" src="papercollect.mp3" preload="auto"></audio>
+  <audio id="closeSound" src="papercollect.mp3" preload="auto"></audio>
+
+  <script>
+    (function(){
+      const envelope = document.getElementById('envelope');
+      const btn = document.getElementById('toggleBtn');
+      const openSound = document.getElementById('openSound');
+      const closeSound = document.getElementById('closeSound');
+
+      function setState(isOpen){
+        envelope.classList.toggle('open', isOpen);
+        envelope.setAttribute('aria-pressed', String(isOpen));
+        btn.textContent = isOpen ? 'Close Letter' : 'Open Letter';
+        btn.setAttribute('aria-pressed', String(isOpen));
+      }
+
+      function toggle(){
+        const isOpen = !envelope.classList.contains('open');
+        setState(isOpen);
+        try{
+          if(isOpen){ openSound.currentTime = 0; openSound.play().catch(()=>{}); }
+          else { closeSound.currentTime = 0; closeSound.play().catch(()=>{}); }
+        }catch(e){}
+      }
+
+      envelope.addEventListener('click', toggle);
+      btn.addEventListener('click', toggle);
+
+      envelope.addEventListener('keydown', (e)=>{
+        if(e.code === 'Space' || e.code === 'Enter'){
+          e.preventDefault(); toggle();
+        }
+      });
+
+      document.addEventListener('keydown', (e)=>{
+        if(e.code === 'Space' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+          e.preventDefault(); toggle();
+        }
+      });
+
+      setState(false);
+
+      window.addEventListener('load', ()=>{
+        envelope.style.transform = 'translateY(-6px)';
+        setTimeout(()=> envelope.style.transform = '', 600);
+      });
+
+    })();
+  </script>
+</body>
+</html>
